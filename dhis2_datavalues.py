@@ -32,12 +32,9 @@ async def getDataSets(dataSetIds):
 async def formulate_data_values(dataSetElements, dataRowsFromSQL):
     dataValues = []
     for dataSetElement in dataSetElements:
-        dataElementCode = dataSetElement["dataElement"]["code"]
-        print(dataElementCode)
         for categoryOptionCombo in dataSetElement["dataElement"]["categoryCombo"]["categoryOptionCombos"]:
             if "code" in categoryOptionCombo and "code" in dataSetElement["dataElement"]:
                 value = await get_value(dataRowsFromSQL,categoryOptionCombo["code"])
-                print(value)
                 dataValue = {
                     "dataElement": dataSetElement["dataElement"]["code"],
                     "categoryOptionCombo": categoryOptionCombo["code"],
@@ -52,6 +49,11 @@ async def get_value(dataRowsFromSQL, code):
         if code in dataRow:
             value = dataRow[code]
     return value
+
+async def send_data_to_dhis2(payload):
+    response = requests.post(BASE_URL + 'api/dataValueSets.json?idScheme=code&async=true', headers=headers, data=json.dumps(payload))
+    return json.loads(response.content.decode('utf-8'))
+
 
 async def main():
     dataSetsIds = ["svi130bL2zK"]
@@ -73,5 +75,7 @@ async def main():
                         "dataValues": dataValues
                     }
             print(json.dumps(payload))
+            # Send data to DHIS2
+            response = await send_data_to_dhis2(payload)
 
 asyncio.run(main())
