@@ -3,9 +3,6 @@ import asyncio
 import json
 from requests.auth import HTTPBasicAuth
 import requests
-from time import sleep
-import os
-import csv
 from datetime import datetime
 
 # Addresses

@@ -3,4 +3,5 @@
 ## Get Started
 
 A. DataValues
-python3.8 dhis2_datavalues.py
+<br>
+Command: `python3.8 dhis2_datavalues.py`
